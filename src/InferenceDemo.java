@@ -1,3 +1,5 @@
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class InferenceDemo {
@@ -14,6 +16,11 @@ public class InferenceDemo {
         var value9 = new ArrayList<Integer>(); // it works, inference to java.util.ArrayList<Integer>
         var value10 = String.class.getName(); // it works, inference to java.lang.String      
         var value11 = System.getenv(); // it works, inference to java.util.Map<String, String>
+        try (var value12 = DriverManager.getConnection("jdbc:mysql://localhost")) { // it works, inference to java.sql.Connection
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         testVar(1);
         testVar('1');
         testVar("1");
