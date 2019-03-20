@@ -3,21 +3,67 @@
   <groupId>Various</groupId>
   <artifactId>variousCode</artifactId>
   <version>0.0.1-SNAPSHOT</version>
+
+  <name>Various Java Stuff</name>
+  <description>Code en vrac</description>
+  
+  <developers>
+    <developer>
+      <id>benfarhat</id>
+      <name>Benfarhat Elyes</name>
+      <email>benfarhat.elyes@benfarhat.com</email>
+      <url>http://www.github.com/benfarhat</url>
+      <organization>ACME</organization>
+      <organizationUrl>http://www.myOrganization.com</organizationUrl>
+      <roles>
+        <role>architect</role>
+        <role>developer</role>
+      </roles>
+      <timezone>America/Montreal</timezone>
+      <properties>
+        <picUrl>https://avatars3.githubusercontent.com/u/1620009</picUrl>
+      </properties>
+    </developer>
+  </developers>
+
+  <organization>
+    <name>Java</name>
+    <url>http://www.java.com</url>
+  </organization>
+  
+  <licenses>
+      <license>
+        <name>Apache License, Version 2.0</name>
+        <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        <distribution>repo</distribution>
+        <comments>A business-friendly OSS license</comments>
+      </license>
+    </licenses>
+  <properties>
+  	<jackson.version>2.9.8</jackson.version>
+  </properties>
+  
   <dependencies>
 	  <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core -->
 	<dependency>
 	    <groupId>com.fasterxml.jackson.core</groupId>
 	    <artifactId>jackson-core</artifactId>
-	    <version>2.9.8</version>
+	    <version>${jackson.version}</version>
 	</dependency>
 	
 	<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
 	<dependency>
 	    <groupId>com.fasterxml.jackson.core</groupId>
 	    <artifactId>jackson-databind</artifactId>
-	    <version>2.9.8</version>
+	    <version>${jackson.version}</version>
 	</dependency>
-		
+	<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.dataformat/jackson-dataformat-yaml -->
+	<dependency>
+	    <groupId>com.fasterxml.jackson.dataformat</groupId>
+	    <artifactId>jackson-dataformat-yaml</artifactId>
+	    <version>${jackson.version}</version>
+	</dependency>
+			
 	  
   </dependencies>
   <build>
