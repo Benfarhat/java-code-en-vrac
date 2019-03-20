@@ -36,6 +36,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
 class Util{
     public static List<String> splitToListString(String input, String separator){
@@ -67,6 +68,9 @@ class Util{
      */
     public static void printLineSeparator() {
         System.out.println("-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-");
+    }
+    public static void printLineSeparator(String message) {
+        System.out.println("-=x=-=x=-=x=[" + message + "]=x=-=x=-=x=-");
     }
 }
 class CustomDateSerializer extends StdSerializer<Date> {
@@ -277,7 +281,7 @@ public class JacksonDemo {
             170000
             ));
         
-        // saving json data to files
+        // writing data to json files
         File dir = new File("target/json/users/");
         dir.mkdirs();
 
@@ -293,6 +297,25 @@ public class JacksonDemo {
         
         mapper.writeValue(new File("target/json/userAccounts/all.json"), accounts);
         System.out.println(mapper.writeValueAsString(accounts));
+        
+        // writing data to yaml files
+        dir = new File("target/yaml/users/");
+        dir.mkdirs();
+
+        dir = new File("target/yaml/userAccounts/");
+        dir.mkdirs();
+        
+        ObjectMapper yamlObjectMapper = new ObjectMapper(new YAMLFactory()); 
+        
+        for(User user: users) {
+            yamlObjectMapper.writeValue(new File("target/yaml/users/" + user.getUsername().trim().replaceAll("\\s", "_").toLowerCase() + ".yml"), user);  
+        }
+        
+        // Multiple objects
+        yamlObjectMapper.writeValue(new File("target/yaml/users/all.yml"), users);
+        
+        // Nested objects
+        yamlObjectMapper.writeValue(new File("target/yaml/userAccounts/all.yml"), accounts);
         
         Util.printLineSeparator();
         
@@ -386,8 +409,10 @@ public class JacksonDemo {
         } catch (IOException e) {
             e.printStackTrace();
         };
+        
+        Util.printLineSeparator();
 
-        // Read from file
+        // Read from JSON file
         
         try {
             TypeReference<List<Account>> typeReference = new TypeReference<>() {};
@@ -408,7 +433,10 @@ public class JacksonDemo {
             e.printStackTrace();
         };
         
-        // Read from URL
+
+        Util.printLineSeparator();
+        
+        // Read from JSON URL
         
         try {
             TypeReference<List<Account>> typeReference = new TypeReference<>() {};
@@ -428,7 +456,29 @@ public class JacksonDemo {
         } catch (IOException e) {
             e.printStackTrace();
         };
+
+
+        Util.printLineSeparator("From Yaml File");
+        // Read from YAML file
         
+        try {
+            TypeReference<List<Account>> typeReference = new TypeReference<>() {};
+            File accountsFromFile = new File("target/yaml/userAccounts/all.yml");
+            accountsList = yamlObjectMapper.readValue(accountsFromFile, typeReference);
+            
+            for(Account elem: accountsList) {
+                System.out.println(elem.getClass());
+                System.out.println(elem.getUser().getTheUsername() + ", " + elem.getUser().getEmail() + ": " + elem.getBalance());
+            }
+        } catch (JsonGenerationException e) {
+            e.printStackTrace();
+        } catch (JsonParseException e) {
+            e.printStackTrace();
+        } catch (JsonMappingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        };    
 
         
     }
