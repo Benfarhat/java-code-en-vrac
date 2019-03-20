@@ -1,0 +1,13 @@
+[ {
+  "username" : "John Doe",
+  "email" : "john.doe@example.com",
+  "birthdate" : "01-02-1980 12:00:00"
+}, {
+  "username" : "Mehdi Harrison",
+  "email" : "mehdi.harrison@example.com",
+  "birthdate" : "20-04-1990 12:00:00"
+}, {
+  "username" : "Ben Fetcher",
+  "email" : "ben.doe@fetcher.com",
+  "birthdate" : "13-07-1995 12:00:00"
+} ]

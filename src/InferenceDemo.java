@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class InferenceDemo {
     public static int localVar = 10;
+    @SuppressWarnings("unused")
     public static void main(String[] args) {
         // var value1; // Cannot use 'var' on variable without initializer
         // var value2 = null; // Cannot infer type for local variable initialized to 'null'
@@ -12,7 +13,11 @@ public class InferenceDemo {
         var value5 = localVar; // it works, occurence of int
         //var value6 = this::localVar; // Method reference needs an explicit target-type
         // var value7 = {1, 2}; // Array initializer needs an explicit target-type
-        var value8 = new Boolean(true); // it works, inference to java.lang.Boolean
+        
+        // The constructor Boolean(boolean) is deprecated since version 9
+        //var value8 = new Boolean(true); // it works, inference to java.lang.Boolean
+        
+        var value8 = Boolean.valueOf(true);
         var value9 = new ArrayList<Integer>(); // it works, inference to java.util.ArrayList<Integer>
         var value10 = String.class.getName(); // it works, inference to java.lang.String      
         var value11 = System.getenv(); // it works, inference to java.util.Map<String, String>
