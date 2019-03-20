@@ -29,6 +29,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.SerializerProvider;
@@ -67,10 +68,10 @@ class Util{
      * Only for demo
      */
     public static void printLineSeparator() {
-        System.out.println("-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-");
+        System.out.println("\n-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-");
     }
     public static void printLineSeparator(String message) {
-        System.out.println("-=x=-=x=-=x=[" + message + "]=x=-=x=-=x=-");
+        System.out.println("\n-=x=-=x=-=x=[" + message + "]=x=-=x=-=x=-");
     }
 }
 class CustomDateSerializer extends StdSerializer<Date> {
@@ -478,8 +479,31 @@ public class JacksonDemo {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        };    
+        };   
+        
 
+        Util.printLineSeparator("Read JsonNode from JSON");
+        
+        //String json = "{\"username\":\"John Doe\",\"email\":\"john.doe@example.com\",\"birthdate\":\"01-02-1980 12:00:00\"}";
+
+
+        JsonNode jsonNode = mapper.readTree(json);
+
+        System.out.println(jsonNode.get("username").asText());
+        System.out.println(jsonNode.get("birthdate").asText());
+        
+        String yaml = "---\r\n" + 
+                "username: \"John Doe\"\r\n" + 
+                "email: \"john.doe@example.com\"\r\n" + 
+                "birthdate: \"01-02-1980 12:00:00\"\r\n" + 
+                "";
+
+        Util.printLineSeparator("Read JsonNode from YAML");
+        
+        jsonNode = yamlObjectMapper.readTree(json);
+
+        System.out.println(jsonNode.get("email").asText());
+        System.out.println(jsonNode.get("birthdate").asText());
         
     }
 
