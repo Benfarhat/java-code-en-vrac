@@ -1,0 +1,19 @@
+---
+- type: 1
+  balance: 200000
+  customer:
+    username: "Aaaéàîö Bbb"
+    email: "email@fetcher.com"
+    birthdate: "13-11-1975 12:00:00"
+- type: 1
+  balance: 150000
+  customer:
+    username: "Cccéàîö Ddd"
+    email: "email@fetcher.com"
+    birthdate: "13-11-1975 12:00:00"
+- type: 2
+  balance: 170000
+  customer:
+    username: "Eeeéàîö Fff"
+    email: "email@fetcher.com"
+    birthdate: "13-11-1975 12:00:00"
