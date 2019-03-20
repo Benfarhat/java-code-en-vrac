@@ -1,0 +1,25 @@
+[ {
+  "type" : 1,
+  "balance" : 200000,
+  "customer" : {
+    "username" : "AAA BBB",
+    "email" : "email@fetcher.com",
+    "birthdate" : "13-11-1975 12:00:00"
+  }
+}, {
+  "type" : 1,
+  "balance" : 150000,
+  "customer" : {
+    "username" : "CCC DDD",
+    "email" : "email@fetcher.com",
+    "birthdate" : "13-11-1975 12:00:00"
+  }
+}, {
+  "type" : 2,
+  "balance" : 170000,
+  "customer" : {
+    "username" : "EEE FFF",
+    "email" : "email@fetcher.com",
+    "birthdate" : "13-11-1975 12:00:00"
+  }
+} ]
