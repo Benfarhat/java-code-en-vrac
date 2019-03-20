@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -47,11 +49,11 @@ class Util{
 
     }
     public static String capitalize(String input) {
-        return Character.toUpperCase(input.charAt(0)) + input.substring(1);
+        return Character.toUpperCase(input.charAt(0)) + input.toLowerCase().substring(1);
      }
     public static String capitalizeFirstLetterOfWords(String input, String separator) {
         List<String> sentences = Util.splitToListString(input, separator);
-
+        
         List<String> results = sentences
             .stream()
             .parallel()
@@ -230,6 +232,7 @@ public class JacksonDemo {
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
         mapper.configure(SerializationFeature.INDENT_OUTPUT, true);
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         // creating users objects
         List<User> users = new ArrayList<User>();
         
@@ -252,21 +255,21 @@ public class JacksonDemo {
         
         List<Account> accounts = new ArrayList<Account>();
         
-        accounts.add(new Account(new User("AAA BBB", 
+        accounts.add(new Account(new User("AAAéàîö BBB", 
                     "SSSSSS", 
                     "email@fetcher.com", 
                     new GregorianCalendar(1975, 10, 13).getTime()),
             1,
             200000
                 ));        
-        accounts.add(new Account(new User("CCC DDD", 
+        accounts.add(new Account(new User("CCCéàîö DDD", 
                 "SSSSSS", 
                 "email@fetcher.com", 
                 new GregorianCalendar(1975, 10, 13).getTime()),
             1,
             150000
             ));        
-        accounts.add(new Account(new User("EEE FFF", 
+        accounts.add(new Account(new User("EEEéàîö FFF", 
                 "SSSSSS", 
                 "email@fetcher.com", 
                 new GregorianCalendar(1975, 10, 13).getTime()),
@@ -336,6 +339,8 @@ public class JacksonDemo {
         
         Util.printLineSeparator();
         
+        // Nested Object / JSON
+        
         String nestedJson = "[ {\r\n" + 
                 "  \"type\" : 1,\r\n" + 
                 "  \"balance\" : 200000,\r\n" + 
@@ -371,6 +376,48 @@ public class JacksonDemo {
             for(Account elem: accountsList) {
                 System.out.println(elem.getClass());
                 System.out.println(elem.getUser().getUsername() + ": " + elem.getBalance());
+            }
+        } catch (JsonGenerationException e) {
+            e.printStackTrace();
+        } catch (JsonParseException e) {
+            e.printStackTrace();
+        } catch (JsonMappingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        };
+
+        // Read from file
+        
+        try {
+            TypeReference<List<Account>> typeReference = new TypeReference<>() {};
+            File accountsFromFile = new File("target/json/userAccounts/all.json");
+            accountsList = mapper.readValue(accountsFromFile, typeReference);
+            
+            for(Account elem: accountsList) {
+                System.out.println(elem.getClass());
+                System.out.println(elem.getUser().getTheUsername() + ", " + elem.getUser().getEmail() + ": " + elem.getBalance());
+            }
+        } catch (JsonGenerationException e) {
+            e.printStackTrace();
+        } catch (JsonParseException e) {
+            e.printStackTrace();
+        } catch (JsonMappingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        };
+        
+        // Read from URL
+        
+        try {
+            TypeReference<List<Account>> typeReference = new TypeReference<>() {};
+            URL accountsURL = new URL("file:target/json/userAccounts/all.json");
+            accountsList = mapper.readValue(accountsURL, typeReference);
+            
+            for(Account elem: accountsList) {
+                System.out.println(elem.getClass());
+                System.out.println(elem.getUser().getTheUsername() + ", " + elem.getUser().getEmail() + ": " + elem.getBalance());
             }
         } catch (JsonGenerationException e) {
             e.printStackTrace();
