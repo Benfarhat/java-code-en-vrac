@@ -60,7 +60,12 @@ class Util{
 
         return Util.joinStringListWithSeparator(results, separator);
     }
-
+    /*
+     * Only for demo
+     */
+    public static void printLineSeparator() {
+        System.out.println("-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-");
+    }
 }
 class CustomDateSerializer extends StdSerializer<Date> {
     
@@ -114,7 +119,7 @@ class CustomDateDeserializer extends StdDeserializer<Date> {
   }
 }
 
-@JsonRootName(value = "user")
+@JsonRootName(value = "customer")
 @JsonPropertyOrder({"username", "email", "birthdate", "password", "id1", "id2", "nullProperties"})
 @JsonIgnoreProperties({ "id1" })
 @JsonInclude(Include.NON_NULL)
@@ -186,6 +191,39 @@ class User{
     }
     
 }
+
+class Account{
+    @JsonProperty("customer")
+    User user;
+    int type;
+    long balance;
+    
+    public User getUser() {
+        return user;
+    }
+    public void setUser(User user) {
+        this.user = user;
+    }
+    public int getType() {
+        return type;
+    }
+    public void setType(int type) {
+        this.type = type;
+    }
+    public long getBalance() {
+        return balance;
+    }
+    public void setBalance(long balance) {
+        this.balance = balance;
+    }
+    public Account(User user, int type, long balance) {
+        super();
+        this.user = user;
+        this.type = type;
+        this.balance = balance;
+    }
+    public Account() {}
+}
 public class JacksonDemo {
     public static void main(String[] args) throws JsonParseException, JsonMappingException, IOException {
         // setup
@@ -211,8 +249,36 @@ public class JacksonDemo {
                     new GregorianCalendar(1995, 06, 13).getTime())
                 );
         
+        
+        List<Account> accounts = new ArrayList<Account>();
+        
+        accounts.add(new Account(new User("AAA BBB", 
+                    "SSSSSS", 
+                    "email@fetcher.com", 
+                    new GregorianCalendar(1975, 10, 13).getTime()),
+            1,
+            200000
+                ));        
+        accounts.add(new Account(new User("CCC DDD", 
+                "SSSSSS", 
+                "email@fetcher.com", 
+                new GregorianCalendar(1975, 10, 13).getTime()),
+            1,
+            150000
+            ));        
+        accounts.add(new Account(new User("EEE FFF", 
+                "SSSSSS", 
+                "email@fetcher.com", 
+                new GregorianCalendar(1975, 10, 13).getTime()),
+            2,
+            170000
+            ));
+        
         // saving json data to files
         File dir = new File("target/json/users/");
+        dir.mkdirs();
+
+        dir = new File("target/json/userAccounts/");
         dir.mkdirs();
         
         for(User user: users) {
@@ -220,7 +286,12 @@ public class JacksonDemo {
         }
         
         mapper.writeValue(new File("target/json/users/all.json"), users);
-        System.out.println(mapper.writeValueAsString(users));
+        System.out.println(mapper.writeValueAsString(users)); 
+        
+        mapper.writeValue(new File("target/json/userAccounts/all.json"), accounts);
+        System.out.println(mapper.writeValueAsString(accounts));
+        
+        Util.printLineSeparator();
         
         // reading from json string
         String json = "{\"username\":\"John Doe\",\"email\":\"john.doe@example.com\",\"birthdate\":\"01-02-1980 12:00:00\"}";
@@ -238,15 +309,16 @@ public class JacksonDemo {
             e.printStackTrace();
         };
         
+        Util.printLineSeparator();
+        
         // reading from json containing multiple users
         // i change username key to pseudo (testing @JsonAlias annotation)
         String jsons = "[{\"pseudo\":\"John Doe\",\"email\":\"john.doe@example.com\",\"birthdate\":\"01-02-1980 12:00:00\"},{\"username\":\"Mehdi Harrison\",\"email\":\"mehdi.harrison@example.com\",\"birthdate\":\"20-04-1990 12:00:00\"},{\"username\":\"Ben Fetcher\",\"email\":\"ben.doe@fetcher.com\",\"birthdate\":\"13-07-1995 12:00:00\"}]";
         List<User> lists = new ArrayList<User>();
-        ObjectMapper objectMapper = new ObjectMapper();
 
         try {
             TypeReference<List<User>> typeReference = new TypeReference<>() {};
-            lists = objectMapper.readValue(jsons, typeReference);
+            lists = mapper.readValue(jsons, typeReference);
             
             for(User elem: lists) {
                 System.out.println(elem.getClass());
@@ -261,6 +333,56 @@ public class JacksonDemo {
         } catch (IOException e) {
             e.printStackTrace();
         };
+        
+        Util.printLineSeparator();
+        
+        String nestedJson = "[ {\r\n" + 
+                "  \"type\" : 1,\r\n" + 
+                "  \"balance\" : 200000,\r\n" + 
+                "  \"customer\" : {\r\n" + 
+                "    \"username\" : \"AAA BBB\",\r\n" + 
+                "    \"email\" : \"email@fetcher.com\",\r\n" + 
+                "    \"birthdate\" : \"13-11-1975 12:00:00\"\r\n" + 
+                "  }\r\n" + 
+                "}, {\r\n" + 
+                "  \"type\" : 1,\r\n" + 
+                "  \"balance\" : 150000,\r\n" + 
+                "  \"customer\" : {\r\n" + 
+                "    \"username\" : \"CCC DDD\",\r\n" + 
+                "    \"email\" : \"email@fetcher.com\",\r\n" + 
+                "    \"birthdate\" : \"13-11-1975 12:00:00\"\r\n" + 
+                "  }\r\n" + 
+                "}, {\r\n" + 
+                "  \"type\" : 2,\r\n" + 
+                "  \"balance\" : 170000,\r\n" + 
+                "  \"customer\" : {\r\n" + 
+                "    \"username\" : \"EEE FFF\",\r\n" + 
+                "    \"email\" : \"email@fetcher.com\",\r\n" + 
+                "    \"birthdate\" : \"13-11-1975 12:00:00\"\r\n" + 
+                "  }\r\n" + 
+                "} ]";
+     
+        List<Account> accountsList = new ArrayList<Account>();
+
+        try {
+            TypeReference<List<Account>> typeReference = new TypeReference<>() {};
+            accountsList = mapper.readValue(nestedJson, typeReference);
+            
+            for(Account elem: accountsList) {
+                System.out.println(elem.getClass());
+                System.out.println(elem.getUser().getUsername() + ": " + elem.getBalance());
+            }
+        } catch (JsonGenerationException e) {
+            e.printStackTrace();
+        } catch (JsonParseException e) {
+            e.printStackTrace();
+        } catch (JsonMappingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        };
+        
+
         
     }
 
