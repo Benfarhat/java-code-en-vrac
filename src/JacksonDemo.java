@@ -36,6 +36,8 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
@@ -500,11 +502,36 @@ public class JacksonDemo {
 
         Util.printLineSeparator("Read JsonNode from YAML");
         
-        jsonNode = yamlObjectMapper.readTree(json);
+        jsonNode = yamlObjectMapper.readTree(yaml);
 
         System.out.println(jsonNode.get("email").asText());
         System.out.println(jsonNode.get("birthdate").asText());
+
+        jsonNode.fieldNames().forEachRemaining(System.out::println);
+
+        Util.printLineSeparator("Modified Json/Object Node");
         
+        ObjectNode objectNode = (ObjectNode) mapper.readTree(json);
+        objectNode.put("modified", true);
+
+        System.out.println(mapper.writeValueAsString(objectNode));
+        jsonNode.fieldNames().forEachRemaining(System.out::println);
+        
+        Util.printLineSeparator("Create custom ObjectNode from object");
+        
+        ObjectNode parentNode = mapper.createObjectNode();
+        JsonNodeFactory jsonFactory = JsonNodeFactory.instance;
+        int count = 1;
+        for(User user: users) {
+            parentNode.set(user.getUsername(),
+                    jsonFactory.objectNode()
+                    .put("position", count++)
+                        .put("email", user.getEmail())
+                        .put("birthdate", user.getBirthdate().toString())
+                    );
+        }
+        
+        System.out.println(mapper.writeValueAsString(parentNode));
     }
 
 }
