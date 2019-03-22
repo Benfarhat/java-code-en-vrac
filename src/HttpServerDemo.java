@@ -1,3 +1,9 @@
+/**
+ * For demo only
+ * A better implementation should add a frontController 
+ * and a way to add some code before and after render
+ * and before and after filter (processing)
+ */
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -7,14 +13,16 @@ import java.net.BindException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.URI;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.apache.commons.validator.routines.DomainValidator;
-
+import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpContext;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -266,13 +274,36 @@ public class HttpServerDemo {
 		
 	}
 	
-	public static void render(HttpExchange exchange, String template, Object[] datas) throws IOException {
-		
+	public static void render(HttpExchange exchange, String template, String variableForTemplate) throws IOException {
 		URI requestURI = exchange.getRequestURI();
-		System.out.println("Rendering " + template + " for " + requestURI.toString());
+		if (MODE == "debug2") {
+			System.out.println("-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-");
+
+			System.out.println("-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-");
+			System.out.println("Rendering " + template + " for " + requestURI.toString());
+			Headers requestHeaders = exchange.getRequestHeaders();
+			System.out.println("Details:\n");
+			requestHeaders.entrySet().forEach(System.out::println);
+
+			System.out.println("-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-");
+			String requestMethod = exchange.getRequestMethod();
+			System.out.println("Method: " + requestMethod);
+
+			System.out.println("-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-=x=-");
+			String query = requestURI.getQuery();
+			System.out.println("Query: " + query);
+		}
+		if (variableForTemplate == null)
+			variableForTemplate = "";
 		
-		String response = getTemplateContent(template);	
-		exchange.sendResponseHeaders(200, response.getBytes().length);	
+		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		Date date = new Date();
+		variableForTemplate = dateFormat.format(date); 
+
+		String response = getTemplateContent(template).replaceAll("\\{\\{ content \\}\\}",variableForTemplate);
+		response = response.replaceAll("\\{\\{ query \\}\\}", "Query: " + requestURI.getQuery());
+	
+		exchange.sendResponseHeaders(200, response.getBytes().length);
 		
 		OutputStream output = exchange.getResponseBody();
 		output.write(response.getBytes());

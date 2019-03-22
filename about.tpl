@@ -50,10 +50,10 @@
         </div>
         <div class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
-                <li><a href="/home">Home</a></li>
-                <li><a href="/index">Index</a></li>
-                <li><a href="/view">View</a></li>
-                <li class="active"><a href="/about">About</a></li>
+                <li><a href="/home?search=QueryInURL">Home</a></li>
+                <li><a href="/index?search=QueryInURL">Index</a></li>
+                <li><a href="/view?search=QueryInURL">View</a></li>
+                <li class="active"><a href="/about?search=QueryInURL">About</a></li>
             </ul>
         </div>
         <!--/.nav-collapse -->
@@ -67,9 +67,9 @@
         <div class="starter-template">
             <h1>ABOUT PAGE</h1>
 
-            <p class="lead">Complete with pre-defined CDN paths!</p>
+            <p class="lead">{{ content }}</p>
 
-            <p><a href="http://getbootstrap.com/getting-started/">http://getbootstrap.com/getting-started/</a></p>
+            <p><a href="#">{{ query }}</a></p>
         </div>
     </div>
     <!-- /.row -->
