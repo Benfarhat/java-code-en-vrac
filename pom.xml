@@ -63,8 +63,15 @@
 	    <artifactId>jackson-dataformat-yaml</artifactId>
 	    <version>${jackson.version}</version>
 	</dependency>
-			
-	  
+	
+	<!-- https://mvnrepository.com/artifact/commons-validator/commons-validator -->
+	<dependency>
+	    <groupId>commons-validator</groupId>
+	    <artifactId>commons-validator</artifactId>
+	    <version>1.6</version>
+	</dependency>
+
+			  
   </dependencies>
   <build>
     <sourceDirectory>src</sourceDirectory>
