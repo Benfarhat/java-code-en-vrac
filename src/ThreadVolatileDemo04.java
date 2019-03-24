@@ -11,7 +11,7 @@ class MyRunnable4 implements Runnable {
 	    	  // Not thread safe
 	    	  // volatile keyword offer a better implementation of atomicity
 	    	  // where data are "SUPPOSED TO BE" refresh before every new use.
-	         System.out.println(Thread.currentThread().getName() + " - " + ++(Test.entier)); 
+	         System.out.println(Thread.currentThread().getName() + " - " + ++(MyRunnable4.entier)); 
 	         if (i % 3 == 0) {
 	        	StringBuilder states = new StringBuilder();
 	        	states.append(ThreadVolatileDemo04.threads.size() + " >-=x=-> ");
