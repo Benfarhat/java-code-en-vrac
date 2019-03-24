@@ -10,7 +10,7 @@ class MyRunnable2 implements Runnable {
 	      for (int i = 0; i < 10; i++) {
 	    	  // Not thread safe
 	    	  // If you see in console, some thread have the same "entier" value
-	         System.out.println(Thread.currentThread().getName() + " - " + ++(Test.entier)); 
+	         System.out.println(Thread.currentThread().getName() + " - " + ++(MyRunnable2.entier)); 
 	         if (i % 3 == 0) {
 	        	StringBuilder states = new StringBuilder();
 	        	states.append(ThreadDemo02.threads.size() + " >-=x=-> ");
