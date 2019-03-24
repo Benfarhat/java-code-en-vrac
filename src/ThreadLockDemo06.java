@@ -1,10 +1,23 @@
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Logger;
 
-class SyncrhonizedObject {
+class LockedObject {
    private int entier = 0;
+   
+   private Lock verrou = new ReentrantLock();
+   public Integer incrementeAndGet() {
+	  verrou.lock();
+	  try {
+	  entier++;
+      } finally {
+    	  verrou.unlock();
+      }
+	  return entier;
+   }
    public void incremente(){
       synchronized(this){
          entier++;
@@ -16,21 +29,23 @@ class SyncrhonizedObject {
       }
    }
 }
-
 class MyRunnable6 implements Runnable {
 	private final static Logger LOGGER = Logger.getLogger(MyRunnable6.class.getName());
 	public static Integer entier = 0;
+	public static SynchronizedObject synchronizedEntier = new SynchronizedObject();
 	
 	   public void run() {
 	      for (int i = 0; i < 10; i++) {
 	    	  // Not thread safe
 	    	  // If you see in console, some thread have the same "entier" value
-	         System.out.println(Thread.currentThread().getName() + " - " + ++(MyRunnable6.entier)); 
+	         System.out.println("NOT THREAD SAFE> " + Thread.currentThread().getName() + " - " + ++(MyRunnable6.entier)); 
+
+	         System.out.println("THREAD SAFE> " + Thread.currentThread().getName() + " - " + MyRunnable6.synchronizedEntier.incrementeAndGet());
 	         if (i % 3 == 0) {
 	        	StringBuilder states = new StringBuilder();
-	        	states.append(ThreadDemo02.threads.size() + " >-=x=-> ");
+	        	states.append(ThreadLockDemo06.threads.size() + " >-=x=-> ");
 
-	     		for (Thread t: ThreadDemo02.threads) {
+	     		for (Thread t: ThreadLockDemo06.threads) {
 	    			states.append(t.getName() + " : " + t.getState() + " | ");
 	    		}
 	     		LOGGER.info(states.toString());
@@ -72,3 +87,4 @@ public class ThreadLockDemo06 {
 	}
 
 }
+
