@@ -8,6 +8,8 @@ class MyRunnable2 implements Runnable {
 	
 	   public void run() {
 	      for (int i = 0; i < 10; i++) {
+	    	  // Not thread safe
+	    	  // If you see in console, some thread have the same "entier" value
 	         System.out.println(Thread.currentThread().getName() + " - " + ++(Test.entier)); 
 	         if (i % 3 == 0) {
 	        	StringBuilder states = new StringBuilder();
