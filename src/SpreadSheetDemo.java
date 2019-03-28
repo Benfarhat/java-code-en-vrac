@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -60,6 +61,13 @@ public class SpreadSheetDemo {
          }
       } 
       
+      // example of formula
+      /*
+      XSSFRow rowFormula = spreadsheet2019.createRow(rowid++);
+      Cell cellFormula = rowFormula.createCell(0);
+      cellFormula.setCellType(XSSFCell.CELL_TYPE_FORMULA);
+      cellFormula.setCellFormula("SUM(B2:B3)"); 
+	  */
       rowid = 0;
 
       for (String key : keyid2018) {
