@@ -12,6 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -206,6 +207,51 @@ public class Calculator implements ActionListener{
 			}
 		});
 
+		JButton backButton = new JButton("B");
+		backButton.setActionCommand("B");
+		backButton.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent event)
+			{
+				Double dbl;
+
+				String hintElement = jHint.getText();
+				String[] arrayHintElement = hintElement.split("\\s+");
+				if (arrayHintElement.length > 1) {
+					String[] newArrayHintElement = Arrays.copyOf(arrayHintElement, arrayHintElement.length - 1);
+					hintElement = String.join(" ", newArrayHintElement);
+					
+					dbl = Double.valueOf(computeFormula(hintElement));
+					
+					//result = String.valueOf(hintElement + " " + getIntegerIfLikeDouble(newElement));
+					jHint.setText(hintElement);
+					jResult.setText(getIntegerIfLikeDouble(dbl));
+
+					jTextField.setText(getIntegerIfLikeDouble(dbl));
+				}
+
+			}
+
+			private String getIntegerIfLikeDouble(Double dResult) {
+				BigDecimal bigDecimal;
+				int intValue;
+				String decimalPart;
+				String result;
+				bigDecimal = new BigDecimal(String.valueOf(dResult));
+				intValue = bigDecimal.intValue();
+				decimalPart = bigDecimal.subtract(new BigDecimal(intValue)).toPlainString();
+
+
+				if (decimalPart.equals("0.0")) {
+					result = String.valueOf(intValue);
+				} else {
+					result = String.valueOf(dResult);
+				}
+				return result;
+			}
+		});
+
+
 		JButton equalsButton = new JButton("=");
 		equalsButton.setActionCommand("=");
 		equalsButton.addActionListener(new ActionListener()
@@ -245,6 +291,7 @@ public class Calculator implements ActionListener{
 			}
 		});
 
+
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
 		c.gridy = 5;
@@ -257,7 +304,16 @@ public class Calculator implements ActionListener{
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 1;
 		c.gridy = 5;
-		c.gridwidth = 2;
+		c.ipadx = 39;
+		c.ipady = 30;
+		c.gridwidth = 1;
+		c.insets = (new Insets(2,2,8,0));
+		pane.add(backButton, c);
+
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 2;
+		c.gridy = 5;
+		c.gridwidth = 1;
 		c.insets = (new Insets(2,0,8,2));
 		pane.add(equalsButton, c);
 
